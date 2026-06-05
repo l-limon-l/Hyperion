@@ -10,7 +10,7 @@
 
 Десктопная утилита для массовой установки популярного ПО на свежую систему Windows. Выберите нужные приложения из каталога, нажмите одну кнопку — Hyperion установит всё автоматически через **winget** в тихом режиме.
 
-<img width="1200" height="880" alt="image" src="https://github.com/user-attachments/assets/14ca73b8-f718-49bf-8ab0-f375d1c53d53" />
+<img width="1200" height="880" alt="image" src="https://github.com/user-attachments/assets/3bd58bf7-8b11-48c2-9bda-3546ec61fd76" />
 
 ## 🌟 Возможности
 
