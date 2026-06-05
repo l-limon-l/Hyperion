@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>HyperionWPF</RootNamespace>
+    <AssemblyName>Hyperion</AssemblyName>
+    <ApplicationIcon>hyperion.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\**\*.png" />
+    <Resource Include="hyperion.ico" />
+  </ItemGroup>
+
+
+
+</Project>
