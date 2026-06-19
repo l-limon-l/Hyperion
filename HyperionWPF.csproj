@@ -9,7 +9,13 @@
     <AssemblyName>Hyperion</AssemblyName>
     <ApplicationIcon>hyperion.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="recovered_src\**" />
+    <None Remove="recovered_src\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Icons\**\*.png" />
