@@ -1,131 +1,68 @@
 # ⚡ Hyperion
 
-<div align="center">
+[🇬🇧 English](#-english) | [🇷🇺 Русский](#-русский)
 
-**Пакетный установщик Windows-приложений с тёмным интерфейсом**
+---
 
-[**Social**](https://e-z.bio/l_limon_l) &nbsp;|&nbsp; [**Telegram**](https://t.me/l_limon_l)
+<a id="-english"></a>
+## 🇬🇧 English
 
-</div>
+**Hyperion** is a batch Windows application installer with a sleek dark interface. It's a desktop utility for mass installation of popular software on a fresh Windows system. Select the apps you need from the catalog, click one button, and Hyperion will install everything automatically via **winget** in silent mode.
 
-Десктопная утилита для массовой установки популярного ПО на свежую систему Windows. Выберите нужные приложения из каталога, нажмите одну кнопку — Hyperion установит всё автоматически через **winget** в тихом режиме.
+### 🚀 Features
+- **Batch Installation**: Select any number of applications and install them in one click.
+- **Triple Installation Engine**: `winget` → `scoop` → `chocolatey` — if one package manager fails, Hyperion automatically tries the next one.
+- **Bilingual Interface**: Automatically detects your system language (English or Russian).
+- **Dark Theme**: VS Code / Visual Studio style interface with a custom title bar and rounded corners (DWM).
+- **Smooth Animations**: Transitions between categories, toggle switches, hover effects — everything is beautifully animated.
+- **Detailed Log**: The entire installation process is displayed in real-time in a built-in console window, with an option to save to a file.
+- **Smart Detection**: Hyperion recognizes already installed applications and skips them.
+- **Extensive Catalog**: 76 apps divided into 14 categories (Browsers, Messengers, Dev Tools, etc.).
 
-<img width="1200" height="880" alt="image" src="https://github.com/user-attachments/assets/3bd58bf7-8b11-48c2-9bda-3546ec61fd76" />
+### 🛠️ Tech Stack
+- C# (.NET Framework 4.8)
+- WPF (Windows Presentation Foundation)
+- winget / scoop / chocolatey APIs
 
-## 🌟 Возможности
+### 📦 Installation & Usage
+1. Download the latest compiled version from the Releases page.
+2. Run `Hyperion.exe` (Administrator privileges are recommended and will be requested automatically).
+3. Browse categories on the left and toggle the switches for the software you want.
+4. Click the large "Install" button.
+5. Watch the real-time log as Hyperion automatically downloads and silently installs everything.
 
-- **⚡ Пакетная установка**: выберите любое количество приложений и установите их в один клик.
-- **🔄 Тройной механизм установки**: `winget` → `scoop` → `chocolatey` — если один менеджер не справился, Hyperion автоматически пробует следующий.
-- **🌍 Двуязычный интерфейс**: автоматически определяет язык системы — русский или английский.
-- **🎨 Тёмная тема**: интерфейс в стиле VS Code / Visual Studio с кастомным title bar и закруглёнными углами (DWM).
-- **✨ Плавные анимации**: переходы между категориями, toggle-переключатели, hover-эффекты карточек — всё анимировано.
-- **📋 Подробный лог**: весь процесс установки отображается в реальном времени в консольном окне с возможностью сохранения в файл.
-- **🔍 Умное определение**: Hyperion распознаёт уже установленные приложения и не устанавливает их повторно.
-- **📦 76 приложений**: обширный каталог ПО, распределённый по 14 категориям.
+*(Note: Requires Windows 10 1709+ with App Installer / winget)*
 
-## 📂 Каталог приложений
+---
 
-| Категория | Приложения |
-|---|---|
-| **Веб-браузеры** | Chrome, Opera, Firefox, Edge, Brave |
-| **Мессенджеры** | Telegram, Discord, Teams, Zoom |
-| **Мультимедиа** | VLC, Spotify, Audacity, HandBrake |
-| **.NET** | Desktop Runtime (v8/v9/v10), ASP.NET Core (v8/v9/v10), .NET 4.8.1 |
-| **Java** | Eclipse Temurin JRE (8/11/17/21), Amazon Corretto JDK (8/11/21) |
-| **Изображения и дизайн** | Krita, Blender, GIMP, IrfanView, Inkscape, Greenshot, ShareX |
-| **Документы** | Foxit Reader, SumatraPDF |
-| **Безопасность** | Malwarebytes |
-| **Файлы и Облако** | qBittorrent, Dropbox, Google Drive, Quick Share, OneDrive |
-| **Другое** | Evernote, Steam, Epic Games, EA App, GOG Galaxy, KeePass 2, Everything |
-| **Утилиты** | TeamViewer, RealVNC (Server/Viewer), TightVNC, TeraCopy, Revo, WizTree, CCleaner |
-| **Архивирование** | 7-Zip, WinRAR |
-| **Библиотеки VC++** | VC Redist 2008 – 2022 (x64 & x86) |
-| **Для разработчиков** | Python 3, Git, FileZilla, Notepad++, WinSCP, PuTTY, WinMerge, VS Code, Cursor |
+<a id="-русский"></a>
+## 🇷🇺 Русский
 
-## ⚙️ Как это работает
+**Hyperion** — это десктопная утилита с тёмным интерфейсом для массовой установки популярного ПО на свежую систему Windows. Выберите нужные приложения из каталога, нажмите одну кнопку — и Hyperion установит всё автоматически через **winget** в тихом режиме.
 
-```
-Пользователь выбирает приложения
-        │
-        ▼
-┌───────────────────────┐
-│ 1. winget install      │──── Успех ──── ✔ Установлено
-│    --exact --silent    │
-└───────────────────────┘
-        │ Неудача
-        ▼
-┌───────────────────────┐
-│ 2. scoop install       │──── Успех ──── ✔ Установлено
-│    (если доступен)     │
-└───────────────────────┘
-        │ Неудача
-        ▼
-┌───────────────────────┐
-│ 3. choco install -y    │──── Успех ──── ✔ Установлено
-│    (если доступен)     │
-└───────────────────────┘
-        │ Неудача
-        ▼
-      ✘ Ошибка записана в лог
-```
+### 🚀 Особенности
+- **Пакетная установка**: выберите любое количество приложений и установите их в один клик.
+- **Тройной механизм установки**: `winget` → `scoop` → `chocolatey` — если один менеджер не справился, Hyperion автоматически пробует следующий.
+- **Двуязычный интерфейс**: автоматически определяет язык системы (русский или английский).
+- **Тёмная тема**: интерфейс в стиле VS Code с кастомным заголовком окна и закруглёнными углами.
+- **Плавные анимации**: переходы между категориями, переключатели, hover-эффекты карточек — всё анимировано.
+- **Подробный лог**: весь процесс установки отображается в реальном времени с возможностью сохранения в файл.
+- **Умное определение**: программа распознаёт уже установленные приложения и не ставит их повторно.
+- **Обширный каталог**: 76 приложений в 14 категориях (Браузеры, Мессенджеры, Для разработчиков и т.д.).
 
-1. **Winget (приоритет)**: `winget install --id <ID> --exact --silent` — основной способ.
-2. **Scoop (fallback #1)**: если winget недоступен или завершился с ошибкой, Hyperion пробует `scoop install <pkg>`.
-3. **Chocolatey (fallback #2)**: если и scoop не помог — `choco install <pkg> -y`.
-4. **Определение статуса**: Hyperion анализирует exit code winget — если приложение уже установлено, это отображается отдельно.
+### 🛠️ Стек технологий
+- C# (.NET Framework 4.8)
+- WPF (Windows Presentation Foundation)
+- winget / scoop / chocolatey
 
-### Требования
-- **Windows 10 1709+** (winget предустановлен в Windows 11; для Windows 10 может потребоваться установка [App Installer](https://apps.microsoft.com/detail/9NBLGGH4NNS1) из Microsoft Store)
+### 📦 Установка и запуск
+1. Скачайте готовую версию со страницы Releases.
+2. Запустите `Hyperion.exe` (программа сама запросит права Администратора).
+3. Пройдитесь по категориям слева и выберите нужные программы ползунками.
+4. Нажмите большую кнопку «Установить».
+5. Наблюдайте за консолью логов: Hyperion сам всё скачает и установит в тихом режиме!
 
-## 🛠 Сборка из исходного кода
+*(Требуется Windows 10 1709+ с установленным App Installer / winget)*
 
-### Требования
-- **.NET Framework 4.8** SDK
-- **Visual Studio 2022** или **.NET CLI**
-
-### Сборка
-
-1. **Клонирование репозитория:**
-   ```bash
-   git clone https://github.com/l-limon-l/Hyperion.git
-   cd Hyperion
-   ```
-
-2. **Сборка через .NET CLI:**
-   ```bash
-   dotnet build -c Release
-   ```
-
-3. **Или откройте `HyperionWPF.csproj` в Visual Studio** и соберите проект (Ctrl + Shift + B).
-
-### Публикация (single-file)
-```bash
-dotnet publish -c Release -r win-x64 --self-contained -o publish_out
-```
-
-## 🏗 Структура проекта
-
-```
-HyperionWPF/
-├── App.xaml / App.xaml.cs      — точка входа приложения
-├── MainWindow.xaml              — разметка главного окна (XAML)
-├── MainWindow.xaml.cs           — логика UI, каталог ПО, механизм установки
-├── Styles/
-│   └── DarkTheme.xaml           — тёмная тема: цвета, toggle switch, кнопки,
-│                                  scrollbar, навигация
-├── Icons/                       — иконки приложений (PNG, 32×32)
-├── hyperion.ico                 — иконка приложения
-├── app.manifest                 — манифест (запрос прав администратора)
-└── HyperionWPF.csproj           — файл проекта (.NET Framework 4.8, WPF)
-```
-
-## 🖥 Интерфейс
-
-- **Левая панель** — навигация по категориям с иконками Segoe MDL2 Assets и акцентным индикатором выбранной категории.
-- **Основная область** — карточки приложений с toggle-переключателями. Группы (Java, .NET, VC++) раскрываются по клику с анимацией.
-- **Кнопка «Установить»** — отображает количество выбранных приложений и запускает пакетную установку.
-- **Лог** — консольная область с кнопками очистки и сохранения лога в файл.
-
-## 📜 Лицензия
-
-Проект распространяется под лицензией MIT. Подробности в файле [`LICENSE`](LICENSE).
+---
+*Made with ❤️ / Сделано с ❤️*
