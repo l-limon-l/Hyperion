@@ -1,0 +1,14 @@
+# Build output
+bin/
+obj/
+*.user
+*.suo
+
+# IDE
+.vs/
+.idea/
+
+# Catalogue tooling
+tools/__pycache__/
+tools/*.db
+tools/*.msix

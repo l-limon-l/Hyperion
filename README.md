@@ -7,62 +7,149 @@
 <a id="-english"></a>
 ## 🇬🇧 English
 
-**Hyperion** is a batch Windows application installer with a sleek dark interface. It's a desktop utility for mass installation of popular software on a fresh Windows system. Select the apps you need from the catalog, click one button, and Hyperion will install everything automatically via **winget** in silent mode.
+**Hyperion** is a batch software installer for Windows with a dark, keyboard-friendly interface.
+Pick what you need on a fresh machine, press one button, and Hyperion installs everything
+silently through **winget**, falling back to **scoop** and **Chocolatey** when a package is
+missing or a download fails.
 
 ### 🚀 Features
-- **Batch Installation**: Select any number of applications and install them in one click.
-- **Triple Installation Engine**: `winget` → `scoop` → `chocolatey` — if one package manager fails, Hyperion automatically tries the next one.
-- **Bilingual Interface**: Automatically detects your system language (English or Russian).
-- **Dark Theme**: VS Code / Visual Studio style interface with a custom title bar and rounded corners (DWM).
-- **Smooth Animations**: Transitions between categories, toggle switches, hover effects — everything is beautifully animated.
-- **Detailed Log**: The entire installation process is displayed in real-time in a built-in console window, with an option to save to a file.
-- **Smart Detection**: Hyperion recognizes already installed applications and skips them.
-- **Extensive Catalog**: 76 apps divided into 14 categories (Browsers, Messengers, Dev Tools, etc.).
+- **Popular first.** The opening page is the set of apps most people put on a new Windows
+  install — browsers, a messenger, an archiver, the VC++ runtime — so a usable machine is two
+  clicks away. Everything else lives in its category.
+- **Batch installation.** Select any number of apps; they install one after another with a
+  progress bar, a running count, and a **Cancel** button that actually stops the run.
+- **Three install engines.** `winget` → `scoop` → `chocolatey`. Each package carries the id for
+  every manager that has it, so a package winget dropped still installs.
+- **Search.** Type in the sidebar to search all 119 entries by name, description or package id.
+- **Version groups.** Runtimes (.NET, Java, VC++) expand into per-version switches with a master
+  switch on the group.
+- **Bilingual.** English and Russian, chosen from the system UI language.
+- **Detailed log.** Everything the package managers print, timestamped, clearable and saveable
+  to a file.
+- **Already-installed detection.** Packages that are present and current are reported as such
+  instead of counting as failures.
+- **Tidy uninstall.** If Hyperion installed scoop or Chocolatey for you, it offers to remove
+  them again when you close it — and it never touches a copy you installed yourself.
 
-### 🛠️ Tech Stack
-- C# (.NET Framework 4.8)
-- WPF (Windows Presentation Foundation)
-- winget / scoop / chocolatey APIs
+### 📚 Catalogue
+**119 entries / 138 packages** across **14 categories**, plus the Popular page:
 
-### 📦 Installation & Usage
-1. Download the latest compiled version from the Releases page.
-2. Run `Hyperion.exe` (Administrator privileges are recommended and will be requested automatically).
-3. Browse categories on the left and toggle the switches for the software you want.
-4. Click the large "Install" button.
-5. Watch the real-time log as Hyperion automatically downloads and silently installs everything.
+| Category | Entries | Category | Entries |
+| --- | --: | --- | --: |
+| Browsers | 9 | Compression | 4 |
+| Messaging | 8 | Security | 5 |
+| Media | 10 | Developer Tools | 16 |
+| Graphics | 11 | .NET | 4 |
+| Documents | 11 | Java | 3 |
+| Gaming | 7 | VC++ Redistributables | 5 |
+| Files & Cloud | 10 | | |
+| Utilities | 16 | | |
 
-*(Note: Requires Windows 10 1709+ with App Installer / winget)*
+Every winget id in the catalogue is checked against the official winget source index before it
+is committed — see [Maintaining the catalogue](#maintaining-the-catalogue).
+
+### 🛠️ Tech stack
+- C# / .NET Framework 4.8
+- WPF, no third-party UI packages
+- winget, scoop and Chocolatey command-line interfaces
+
+### 📦 Install & use
+1. Download the latest build from the Releases page.
+2. Run `Hyperion.exe`. It requests administrator rights, which the package managers need.
+3. Pick apps from **Popular**, browse the categories, or search.
+4. Press **Install selected**.
+5. Watch the log. Hyperion downloads and installs everything without further prompts.
+
+Requires Windows 10 1709 or newer with App Installer (winget) present.
+
+<a id="maintaining-the-catalogue"></a>
+### 🧰 Maintaining the catalogue
+The catalogue is data, not hand-written C#. `Model/Catalog.Data.cs` is generated:
+
+```bash
+cd tools
+python3 verify_ids.py    # checks every winget id against the live winget source index
+python3 gen_catalog.py   # regenerates Model/Catalog.Data.cs from catalog.py
+```
+
+To add an app, add one line to `tools/catalog.py`, run both scripts, and rebuild. Drop a 32×32
+PNG into `Icons/` named after the entry key to give it a logo; without one the app draws a
+coloured monogram tile.
 
 ---
 
 <a id="-русский"></a>
 ## 🇷🇺 Русский
 
-**Hyperion** — это десктопная утилита с тёмным интерфейсом для массовой установки популярного ПО на свежую систему Windows. Выберите нужные приложения из каталога, нажмите одну кнопку — и Hyperion установит всё автоматически через **winget** в тихом режиме.
+**Hyperion** — десктопная утилита для массовой установки программ на Windows с тёмным
+интерфейсом. Отметьте нужное на свежей системе, нажмите одну кнопку — и Hyperion установит всё
+в тихом режиме через **winget**, а если пакета там нет или загрузка сорвалась, попробует
+**scoop** и **Chocolatey**.
 
 ### 🚀 Особенности
-- **Пакетная установка**: выберите любое количество приложений и установите их в один клик.
-- **Тройной механизм установки**: `winget` → `scoop` → `chocolatey` — если один менеджер не справился, Hyperion автоматически пробует следующий.
-- **Двуязычный интерфейс**: автоматически определяет язык системы (русский или английский).
-- **Тёмная тема**: интерфейс в стиле VS Code с кастомным заголовком окна и закруглёнными углами.
-- **Плавные анимации**: переходы между категориями, переключатели, hover-эффекты карточек — всё анимировано.
-- **Подробный лог**: весь процесс установки отображается в реальном времени с возможностью сохранения в файл.
-- **Умное определение**: программа распознаёт уже установленные приложения и не ставит их повторно.
-- **Обширный каталог**: 76 приложений в 14 категориях (Браузеры, Мессенджеры, Для разработчиков и т.д.).
+- **Сначала популярное.** Первая страница — то, что чаще всего ставят на новую Windows:
+  браузер, мессенджер, архиватор, библиотеки VC++. Рабочая система в два клика. Остальное
+  разложено по категориям.
+- **Пакетная установка.** Выберите сколько угодно программ: они ставятся по очереди, с
+  прогресс-баром, счётчиком и кнопкой **Отмена**, которая действительно прерывает установку.
+- **Три механизма установки.** `winget` → `scoop` → `chocolatey`. У каждого пакета указаны
+  идентификаторы всех менеджеров, где он есть, поэтому программа установится даже если её
+  убрали из winget.
+- **Поиск.** Начните печатать в боковой панели — поиск идёт по названию, описанию и
+  идентификатору пакета среди всех 119 позиций.
+- **Группы версий.** Среды выполнения (.NET, Java, VC++) раскрываются в переключатели по
+  версиям, с общим переключателем на группе.
+- **Два языка.** Русский и английский, по языку системы.
+- **Подробный лог.** Всё, что печатают пакетные менеджеры, с отметками времени, с очисткой и
+  сохранением в файл.
+- **Определение установленного.** Актуальные версии отмечаются как «уже было», а не как ошибки.
+- **Аккуратное удаление.** Если Hyperion сам поставил scoop или Chocolatey, при закрытии он
+  предложит их удалить — и никогда не тронет те, что вы ставили сами.
+
+### 📚 Каталог
+**119 позиций / 138 пакетов** в **14 категориях**, плюс страница «Популярное»:
+
+| Категория | Позиций | Категория | Позиций |
+| --- | --: | --- | --: |
+| Браузеры | 9 | Архиваторы | 4 |
+| Мессенджеры | 8 | Безопасность | 5 |
+| Мультимедиа | 10 | Для разработчиков | 16 |
+| Графика и дизайн | 11 | .NET | 4 |
+| Документы | 11 | Java | 3 |
+| Игры | 7 | Библиотеки VC++ | 5 |
+| Файлы и облако | 10 | | |
+| Утилиты | 16 | | |
+
+Каждый идентификатор winget сверяется с официальным индексом источника winget перед коммитом —
+см. [Поддержка каталога](#поддержка-каталога).
 
 ### 🛠️ Стек технологий
-- C# (.NET Framework 4.8)
-- WPF (Windows Presentation Foundation)
-- winget / scoop / chocolatey
+- C# / .NET Framework 4.8
+- WPF, без сторонних UI-библиотек
+- Командные интерфейсы winget, scoop и Chocolatey
 
 ### 📦 Установка и запуск
-1. Скачайте готовую версию со страницы Releases.
-2. Запустите `Hyperion.exe` (программа сама запросит права Администратора).
-3. Пройдитесь по категориям слева и выберите нужные программы ползунками.
-4. Нажмите большую кнопку «Установить».
-5. Наблюдайте за консолью логов: Hyperion сам всё скачает и установит в тихом режиме!
+1. Скачайте готовую сборку со страницы Releases.
+2. Запустите `Hyperion.exe` — он запросит права администратора, нужные пакетным менеджерам.
+3. Выберите программы на странице «Популярное», в категориях или через поиск.
+4. Нажмите **Установить выбранное**.
+5. Следите за логом: Hyperion всё скачает и установит без лишних вопросов.
 
-*(Требуется Windows 10 1709+ с установленным App Installer / winget)*
+Требуется Windows 10 1709 или новее с установленным App Installer (winget).
+
+<a id="поддержка-каталога"></a>
+### 🧰 Поддержка каталога
+Каталог — это данные, а не рукописный C#. Файл `Model/Catalog.Data.cs` генерируется:
+
+```bash
+cd tools
+python3 verify_ids.py    # сверяет все идентификаторы winget с живым индексом источника
+python3 gen_catalog.py   # пересобирает Model/Catalog.Data.cs из catalog.py
+```
+
+Чтобы добавить программу, допишите строку в `tools/catalog.py`, запустите оба скрипта и
+пересоберите проект. Положите PNG 32×32 в `Icons/` с именем ключа записи — и у неё появится
+логотип; без него рисуется цветная плитка с буквой.
 
 ---
 *Made with ❤️ / Сделано с ❤️*
