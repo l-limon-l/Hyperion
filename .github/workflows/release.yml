@@ -3,6 +3,14 @@ name: Release
 on:
   push:
     tags: ['v*']
+  # Lets a release be cut from the Actions tab; the tag is created by this
+  # run, at the commit it checks out.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release, for example v2.0.0'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -19,7 +27,7 @@ jobs:
         id: tag
         shell: bash
         run: |
-          tag="${GITHUB_REF_NAME}"
+          tag="${{ inputs.tag || github.ref_name }}"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
           # A tag such as v2.1.0-rc1 publishes as a pre-release.
@@ -72,6 +80,11 @@ jobs:
           flags=(--title "Hyperion ${{ steps.tag.outputs.version }}" --notes "$notes" --generate-notes)
           if [ "${{ steps.tag.outputs.prerelease }}" = "true" ]; then
             flags+=(--prerelease)
+          fi
+
+          # On a manual run the tag does not exist yet, so pin it to this commit.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            flags+=(--target "${{ github.sha }}")
           fi
 
           gh release create "${{ steps.tag.outputs.tag }}" \
