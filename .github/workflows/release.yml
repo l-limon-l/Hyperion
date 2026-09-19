@@ -1,0 +1,80 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the tag
+        id: tag
+        shell: bash
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+          # A tag such as v2.1.0-rc1 publishes as a pre-release.
+          case "$tag" in
+            *-*) echo "prerelease=true"  >> "$GITHUB_OUTPUT" ;;
+            *)   echo "prerelease=false" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      # A tag that disagrees with the assembly version ships a build whose
+      # About box contradicts its own download page. Stop before that happens.
+      - name: Check the tag matches the project version
+        shell: bash
+        run: |
+          project=$(sed -n 's|.*<Version>\([^<]*\)</Version>.*|\1|p' HyperionWPF.csproj)
+          if [ "$project" != "${{ steps.tag.outputs.version }}" ]; then
+            echo "::error::Tag ${{ steps.tag.outputs.tag }} does not match <Version>$project</Version> in HyperionWPF.csproj."
+            exit 1
+          fi
+          echo "Tag and project version agree on $project."
+
+      - name: Build
+        run: dotnet build HyperionWPF.csproj --configuration Release -warnaserror
+
+      - name: Package
+        shell: bash
+        run: |
+          mkdir -p dist/Hyperion
+          cp bin/Release/net48/Hyperion.exe bin/Release/net48/Hyperion.exe.config dist/Hyperion/
+          cp README.md LICENSE dist/Hyperion/
+          cd dist
+          7z a -tzip "Hyperion-${{ steps.tag.outputs.tag }}.zip" Hyperion
+          cp Hyperion/Hyperion.exe .
+
+      - name: Publish the release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes=$(cat <<'MARKDOWN'
+          Windows 10 1709 or newer with App Installer (winget) is required.
+
+          - `Hyperion.exe` — the application on its own; icons are embedded, nothing else is needed.
+          - `Hyperion-TAG.zip` — the same executable with its config, the README and the licence.
+
+          Hyperion asks for administrator rights on start, which the package managers need.
+          MARKDOWN
+          )
+          notes="${notes//TAG/${{ steps.tag.outputs.tag }}}"
+
+          flags=(--title "Hyperion ${{ steps.tag.outputs.version }}" --notes "$notes" --generate-notes)
+          if [ "${{ steps.tag.outputs.prerelease }}" = "true" ]; then
+            flags+=(--prerelease)
+          fi
+
+          gh release create "${{ steps.tag.outputs.tag }}" \
+            "dist/Hyperion-${{ steps.tag.outputs.tag }}.zip" \
+            "dist/Hyperion.exe" \
+            "${flags[@]}"
