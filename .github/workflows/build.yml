@@ -1,0 +1,54 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build (net48)
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore
+        run: dotnet restore HyperionWPF.csproj
+
+      - name: Build
+        run: dotnet build HyperionWPF.csproj --configuration Release --no-restore -warnaserror
+
+      - name: Upload Hyperion.exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: Hyperion-${{ github.sha }}
+          path: bin/Release/net48/
+          if-no-files-found: error
+
+  catalogue:
+    name: Verify winget ids
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Checks every id in tools/catalog.py against the package index winget
+      # itself downloads, so an id retired upstream is caught here.
+      - name: Verify ids against the winget source index
+        working-directory: tools
+        run: python verify_ids.py
+
+      # The generated catalogue must match its source; a hand edit to
+      # Model/Catalog.Data.cs shows up as a diff.
+      - name: Check the generated catalogue is current
+        working-directory: tools
+        run: |
+          python gen_catalog.py
+          git diff --exit-code -- ../Model/Catalog.Data.cs
